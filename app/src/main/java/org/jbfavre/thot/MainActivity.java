@@ -1,5 +1,6 @@
 package org.jbfavre.thot;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import java.util.List;
 import org.jbfavre.thot.API.ThotApiProvider;
+import org.jbfavre.thot.Activities.SetupActivity;
 import org.jbfavre.thot.Model.Tag;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -59,6 +61,15 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        if (!isAppConfigured()){
+            Intent intent = new Intent(this, SetupActivity.class);
+            startActivity(intent);
+        }
+    }
+
+    private boolean isAppConfigured(){
+        return false;
     }
 
     @Override
