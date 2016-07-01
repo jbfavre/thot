@@ -1,9 +1,8 @@
 package org.jbfavre.thot;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -12,9 +11,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import java.util.List;
+import org.jbfavre.thot.API.ThotApiProvider;
+import org.jbfavre.thot.Activities.SetupActivity;
+import org.jbfavre.thot.Model.Tag;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private ThotApiProvider thotApiProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,12 +32,24 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        thotApiProvider = new ThotApiProvider();
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Call<List<Tag>> call = thotApiProvider.selfossApi.getTags();
+                call.enqueue(new Callback<List<Tag>>() {
+                    @Override
+                    public void onResponse(Call<List<Tag>> call, Response<List<Tag>> response) {
+                        String str = response.body().get(0).getTag();
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Tag>> call, Throwable t) {
+                        String str = t.getMessage();
+                    }
+                });
             }
         });
 
@@ -40,6 +61,15 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        if (!isAppConfigured()){
+            Intent intent = new Intent(this, SetupActivity.class);
+            startActivity(intent);
+        }
+    }
+
+    private boolean isAppConfigured(){
+        return false;
     }
 
     @Override
