@@ -15,7 +15,10 @@ import android.view.View;
 import java.util.List;
 import org.jbfavre.thot.API.ThotApiProvider;
 import org.jbfavre.thot.Activities.SetupActivity;
+import org.jbfavre.thot.Model.Article;
 import org.jbfavre.thot.Model.Tag;
+import org.jbfavre.thot.helpers.SharedPreferencesHelper;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,27 +35,6 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        thotApiProvider = new ThotApiProvider();
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Call<List<Tag>> call = thotApiProvider.selfossApi.getTags();
-                call.enqueue(new Callback<List<Tag>>() {
-                    @Override
-                    public void onResponse(Call<List<Tag>> call, Response<List<Tag>> response) {
-                        String str = response.body().get(0).getTag();
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<Tag>> call, Throwable t) {
-                        String str = t.getMessage();
-                    }
-                });
-            }
-        });
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -62,14 +44,20 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        if (!isAppConfigured()){
+        if (!SharedPreferencesHelper.isAppConfigured(this)){
             Intent intent = new Intent(this, SetupActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, 42);
         }
+
     }
 
-    private boolean isAppConfigured(){
-        return false;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 42 && resultCode == RESULT_OK) {
+
+        }else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     @Override

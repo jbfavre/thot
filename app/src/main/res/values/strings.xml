@@ -7,5 +7,21 @@
     <string name="action_settings">Settings</string>
 
     <string name="end_point">Endpoint</string>
+    <string name="requires_ssl">Requires SSL</string>
+    <string name="requires_authentication">Requires authentication</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="credentials_check">Check</string>
+    <string name="refresh_at_startup">Refresh at app launch</string>
+    <string name="ok">OK</string>
+
+    <string name="preference_file_key">org.jbfavre.thot.configuration</string>
+    <string name="conf_endpoint">endpoint</string>
+    <string name="conf_auth">authentication</string>
+    <string name="conf_auth_passwd">auth_password</string>
+    <string name="conf_auth_login">auth_login</string>
+    <string name="conf_ssl">ssl</string>
+    <string name="conf_refresh_at_startup">startup_refresh</string>
+    <string name="conf_auth_token">auth_token</string>
 
 </resources>

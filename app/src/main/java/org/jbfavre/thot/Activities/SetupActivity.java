@@ -10,7 +10,17 @@ import android.widget.Switch;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import org.jbfavre.thot.API.ThotApiProvider;
+import org.jbfavre.thot.Model.ApiSuccessResponse;
+import org.jbfavre.thot.Model.Tag;
 import org.jbfavre.thot.R;
+import org.jbfavre.thot.helpers.SharedPreferencesHelper;
+
+import java.util.List;
 
 public class SetupActivity extends Activity {
 
@@ -44,7 +54,39 @@ public class SetupActivity extends Activity {
 
     @OnClick(R.id.ok_button)
     public void okOnClick(){
-        // TODO Save into Shared Preferences all the values
-        // https://developer.android.com/training/basics/data-storage/shared-preferences.html
+        boolean sslRequired = sslSwitch.isChecked();
+        final String endpoint = (sslRequired ? "https://" : "http://") + endpointEditText.getText().toString();
+
+        final boolean authRequired = authSwitch.isChecked();
+        final String login = authLoginEditText.getText().toString();
+        final String password = authPasswordEditText.getText().toString();
+        final boolean refreshAtStartup = refreshSwitch.isChecked();
+        SharedPreferencesHelper.saveConfiguration(this, endpoint, authRequired, login, password, refreshAtStartup);
+
+        ThotApiProvider thotApiProvider = new ThotApiProvider(this);
+        Call<ApiSuccessResponse> call = thotApiProvider.selfossApi.login( login, password );
+        call.enqueue(new Callback<ApiSuccessResponse>() {
+            @Override
+            public void onResponse(Call<ApiSuccessResponse> call, Response<ApiSuccessResponse> response) {
+                boolean success = response.body().isSuccess();
+                if(success) {
+                    String authToken = getToken(response.raw().headers().get("Set-Cookie"));
+                    SharedPreferencesHelper.saveToken(SetupActivity.this, authToken);
+                }else {
+                    SharedPreferencesHelper.clearConfiguration(SetupActivity.this);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiSuccessResponse> call, Throwable t) {
+                String str = t.getMessage();
+            }
+        });
+
+
+    }
+
+    private String getToken(String s) {
+        return s.substring(0, s.indexOf(";"));
     }
 }

@@ -33,6 +33,7 @@
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="1"
+          android:text="@string/requires_ssl"
           tools:text="Requires SSL"
           />
 
@@ -54,6 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         tools:text="Requires authentication"
+        android:text="@string/requires_authentication"
         />
 
     <Switch
@@ -81,9 +83,8 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginTop="@dimen/activity_vertical_margin"
-          android:hint="@string/end_point"
+          android:hint="@string/login"
           android:imeOptions="actionNext"
-          android:inputType="textEmailAddress"
           tools:hint="Login"
           />
 
@@ -99,7 +100,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginTop="@dimen/activity_vertical_margin"
-          android:hint="@string/end_point"
+          android:hint="@string/password"
           android:imeOptions="actionNext"
           android:inputType="textPassword"
           tools:hint="Password"
@@ -112,6 +113,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="Check"
+        android:text="@string/credentials_check"
         android:layout_gravity="center"/>
 
   </LinearLayout>
@@ -126,6 +128,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         tools:text="Refresh at app launch"
+        android:text="@string/refresh_at_startup"
         />
 
     <Switch
@@ -147,7 +150,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
-        tools:text="OK"/>
+        tools:text="OK"
+        android:text="@string/ok"/>
 
   </FrameLayout>
 
